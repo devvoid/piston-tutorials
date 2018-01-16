@@ -1,0 +1,12 @@
+[package]
+name = "piston-tutorials"
+version = "0.1.0"
+authors = ["void"]
+
+[[bin]]
+name = "hello_window"
+path = "src/hello_window.rs"
+
+[dependencies]
+piston = "0.35.0"
+piston_window = "*"
