@@ -1,3 +1,6 @@
+//Covers base window creation
+//If you can compile and run this example, you should be good to go
+
 extern crate piston_window;
 
 use piston_window::*;

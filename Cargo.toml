@@ -7,6 +7,17 @@ authors = ["void"]
 name = "hello_window"
 path = "src/hello_window.rs"
 
+[[bin]]
+name = "pong"
+path = "src/pong/pong.rs"
+
+[[bin]]
+name = "pong_ball"
+path = "src/pong/pong_ball.rs"
+
 [dependencies]
-piston = "0.35.0"
+piston = "*"
 piston_window = "*"
+find_folder = "*"
+rand = "*"
+ears = "*"
