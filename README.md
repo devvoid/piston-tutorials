@@ -6,7 +6,7 @@ Must have a basic understanding of Rust, including concepts like functions, vari
 
 Graphics card must support OpenGL 2.1 or higher to run Piston.
 
-Piston doesn't seem to have a native audio API from what I can tell, so the Ears library is being used instead. Ears requires OpenAL and libsnd be installed on the target system. Refer to the (Ears documentation)[https://github.com/jhasse/ears] for information on installing them.
+Piston doesn't seem to have a native audio API from what I can tell, so the Ears library is being used instead. Ears requires OpenAL and libsnd be installed on the target system. Refer to the [Ears documentation](https://github.com/jhasse/ears) for information on installing them.
 
 ## Intended order
 1. hello_window (base window creation, basic explanation of event loop)
