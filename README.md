@@ -13,3 +13,6 @@ Piston doesn't seem to have a native audio API from what I can tell, so the Ears
 2. pong (find_folder, more detailed event loop, keyboard input, sprite loading)
 3. aabb (AABB-based collision detection)
 4. pong_ball (random number generation, sound playing, text rendering)
+
+## Other
+The Coder's Crux font used in the pong_ball example was created by Andrew McClusky. You can find its download page [here](https://www.dafont.com/coders-crux.font).
