@@ -15,6 +15,10 @@ path = "src/pong/pong.rs"
 name = "pong_ball"
 path = "src/pong/pong_ball.rs"
 
+[[bin]]
+name = "aabb"
+path = "src/collision/aabb.rs"
+
 [dependencies]
 piston = "*"
 piston_window = "*"

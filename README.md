@@ -12,3 +12,4 @@ Piston doesn't seem to have a native audio API from what I can tell, so the Ears
 1. hello_window (base window creation, basic explanation of event loop)
 2. pong (find_folder, more detailed event loop, keyboard input, sprite loading)
 3. pong_ball (random number generation, sound playing, text rendering)
+4. aabb (AABB-based collision detection)
