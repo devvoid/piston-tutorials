@@ -8,10 +8,6 @@ extern crate find_folder;
 //Needed for generating the angle a ball travels after colliding with a paddle
 extern crate rand;
 
-//Crate that allows sound playing
-extern crate ears;
-
-use ears::{Sound, AudioController};
 use rand::Rng;
 use piston_window::*;
 
@@ -92,9 +88,6 @@ fn main() {
     //Scores of both players
     let mut player_one_score: u32 = 0;
     let mut player_two_score: u32 = 0;
-
-    //Ball sound effect
-    let mut snd = Sound::new(assets.join("pong/ball.wav").to_str().unwrap()).unwrap();
 
     //Load a font, for text rendering.
     let mut font = Glyphs::new(
@@ -213,9 +206,6 @@ fn main() {
 
                 //Set the ball to just barely under the screen, so it won't jitter there if delta time puts it a decent ways past the wall
                 ball.y = 0.01;
-
-                //Play the ball sound
-                snd.play();
             }
 
             //Do the same for the bottom of the screen
@@ -223,8 +213,6 @@ fn main() {
                 ball_angle = -ball_angle;
 
                 ball.y = 311.99;
-
-                snd.play();
             }
 
             //Handle ball colliding with left paddle
@@ -234,8 +222,6 @@ fn main() {
 
                 //Set the ball to just right of the paddle so it won't immediately collide again.
                 ball.x = left_paddle.x + left_paddle.w + 0.01;
-
-                snd.play();
             }
 
             //Handle ball colliding with right paddle
@@ -245,7 +231,6 @@ fn main() {
 
                 ball.x = right_paddle.x - ball.w - 0.01;
 
-                snd.play();
             } 
 
             ball.x += ball_angle.cos() * BALL_SPEED * u.dt;
