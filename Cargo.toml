@@ -2,6 +2,7 @@
 name = "piston-tutorials"
 version = "0.1.0"
 authors = ["void"]
+license = "MIT/Apache-2.0"
 
 [[bin]]
 name = "hello_window"
