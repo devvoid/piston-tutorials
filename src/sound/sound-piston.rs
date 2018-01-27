@@ -17,7 +17,9 @@ enum SoundState {
     Mute
 }
 
-//piston_music seems to work by binding enums to sound files to play them, so I'll create the enums here.
+//piston_music works by binding sound files to enum values.
+//According to the piston_music source code, enums used like this need to impliment
+//Hash and Eq, and have a static lifetime.
 #[derive(Copy, Clone, Hash, PartialEq, Eq)]
 enum Music {
     Piano,
