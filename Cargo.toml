@@ -20,9 +20,18 @@ path = "src/pong/pong_ball.rs"
 name = "aabb"
 path = "src/collision/aabb.rs"
 
+[[bin]]
+name = "sound-ears"
+path = "src/sound/sound-ears.rs"
+
+[[bin]]
+name = "sound-piston"
+path = "src/sound/sound-piston.rs"
+
 [dependencies]
 piston = "*"
 piston_window = "*"
 find_folder = "*"
 rand = "*"
 ears = "*"
+piston-music = "*"
