@@ -6,7 +6,7 @@ Must have a basic understanding of Rust, including concepts like functions, vari
 
 Graphics card must support OpenGL 2.1 or higher to run Piston.
 
-Two different sound libraries are included and used in the examples in the sound folder: Ears, and piston\_music. Ears requires OpenAL and libsnd, while piston\_music requires SDL2 and SDL2\_mixer. If you don't have these libraries installed and don't plan on using the sound examples, you can just remove them from Cargo.toml's dependencies sections.
+Two different sound libraries are included and used in the examples in the sound folder: Ears, and piston\_music. Ears requires OpenAL and libsnd, while piston\_music requires SDL2 and SDL2\_mixer. If you don't have these libraries installed and don't plan on using the sound examples, you can just remove them from Cargo.toml's dependencies section.
 
 ## Intended order
 1. hello_window (base window creation, basic explanation of event loop)
