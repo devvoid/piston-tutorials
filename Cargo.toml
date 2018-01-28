@@ -34,8 +34,11 @@ path = "src/1-getting_started/6-sound_piston.rs"
 
 [[bin]]
 name = "pong"
-path = "src/pong/pong.rs"
+path = "src/2-pong/pong_soundless.rs"
 
+[[bin]]
+name = "pong_sound_ears"
+path = "src/2-pong/pong_sound_ears.rs"
 
 [dependencies]
 piston = "*"

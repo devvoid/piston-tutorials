@@ -22,6 +22,8 @@ Speaker icons used in the sound examples are taken from Wikipedia, and are also 
 
 The beeping sound used in the sound examples are from use code149 on Freesound, and can be downloaded from [here](https://freesound.org/people/code419/sounds/402853/). No edits or alterations were made to the original track.
 
+beep.ogg, used in the pong examples, is from rust-pong, and is under the MIT license. You can find its repository [here](https://github.com/coeuvre/rust-pong).
+
 ## License
 
 Licensed under either of
