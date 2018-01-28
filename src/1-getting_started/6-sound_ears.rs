@@ -1,5 +1,5 @@
-//Ears is a simple crate that provides sound playing in Rust
-//Ears is much simpler to impliment than piston_music, so I figured I would write a tutorial for it as well
+///Feature: sound_ears
+/// Example demonstrating Ears, a simple Rust sound library
 
 extern crate ears;
 extern crate piston_window;
@@ -91,9 +91,7 @@ fn main() {
 
                 //If the sound isn't already playing, play a beeping sound.
                 Key::Space => {
-                    if !snd.is_playing() {
-                        snd.play();
-                    }
+                    snd.play();
                 }
 
                 _ => {}

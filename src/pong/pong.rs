@@ -1,68 +1,93 @@
-//Load two paddles and a seperator from textures
-//Also introduces keyboard input, and a more advanced game loop
-//The ball will be introduced in the pong_ball example, since it's more complicated than what you see here and I don't want to introduce too many new concepts too fast
+///Feature name: pong
+/// Puts together everything from the getting_started examples, and makes a simple Pong clone.
 
 extern crate piston_window;
 
-//Allows you to search for folders instead of having to specify an exact path
-//Very helpful while testing because searching for folders is relative to the terminal the program is being run from
-//so this makes sure you don't have to copy any assets to the build folder while still testing
 extern crate find_folder;
 
+//Crate that allows the generation of pseudo-random numbers
+//Needed for generating the angle a ball travels after colliding with a paddle
+extern crate rand;
+
+use rand::Rng;
 use piston_window::*;
 
+struct Rect {
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+}
+
+impl Rect {
+    pub fn new(new_x: f64, new_y: f64, new_w: f64, new_h: f64) -> Rect {
+        Rect { x: new_x, y: new_y, w: new_w, h: new_h }
+    }
+
+    pub fn intersects(&self, other: &Rect) -> bool {
+        if self.x < other.x + other.w &&
+        self.x + self.w > other.x &&
+        self.y < other.y + other.h &&
+        self.h + self.y > other.y {
+            return true;
+        }
+        
+        false
+    }
+}
+
+//Speeds for the players and balls, in pixels per second.
+const PLAYER_SPEED: f64 = 150.0;
+const BALL_SPEED: f64 = 200.0;
+
 fn main() {
-    //Search for the assets folder and save its path
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
     
-    //Create window, exactly like in hello_window
     let opengl = OpenGL::V3_2;
 
-    let mut window: PistonWindow = WindowSettings::new(
-        "Pong",
-        [640, 320]
-    ).opengl(opengl).exit_on_esc(true).build().unwrap();
+    let mut window: PistonWindow = WindowSettings::new("Pong", [640, 320])
+        .opengl(opengl)
+        .exit_on_esc(true)
+        .build()
+        .unwrap();
 
-    //Load the texture for the seperator in the middle of the field
     let seperator = Texture::from_path(
-        &mut window.factory, //OpenGL context to load the texture in
-        assets.join("pong/seperator.png"), //Path to the texture
-        Flip::None, //Flipping mode for the texture
-        &TextureSettings::new() //Custom settings for the texture can be passed in using a TextureSettings struct, but that's not needed here, so pass in a blank one
-    ).unwrap();
-
-    //Load the texture used for the paddles
-    let paddle = Texture::from_path(
         &mut window.factory,
-        assets.join("pong/paddle.png"),
+        assets.join("pong/seperator.png"),
         Flip::None,
         &TextureSettings::new()
-    ).unwrap();
+    ).expect("Cannot find pong/seperator.png in the assets folder");
 
-    //Speed in pixels that the paddles move per second
-    let player_speed: f64 = 150.0;
-
-    //Y position for the left paddle
-    //Starts at 120, around the center of the screen
-    let mut left_y: f64 = 120.0;
-
-    //Movement variables for the left paddle
+    //Left paddle
+    let mut left_paddle = Rect::new(50.0, 120.0, 10.0, 80.0);
     let mut left_moving_up: bool = false;
     let mut left_moving_down: bool = false;
 
-    //Y position for the right paddle
-    let mut right_y: f64 = 120.0;
-
-    //Movement variables for the right paddle
+    //Right paddle
+    let mut right_paddle = Rect::new(590.0, 120.0, 10.0, 80.0);
     let mut right_moving_up: bool = false;
     let mut right_moving_down: bool = false;
 
-    //This loop is different from the one in hello_world - it properly responds to different kinds of events, instead of just always drawing regardless of event
+    //The ball
+    let mut ball = Rect::new(316.0, 156.0, 8.0, 8.0);
+
+    //The angle the ball moves in
+    //gen_range generates a number between 0 and 360
+    let mut ball_angle: f64 = rand::thread_rng().gen_range(0.0, 360.0);
+
+    //Scores of both players
+    let mut player_one_score: u32 = 0;
+    let mut player_two_score: u32 = 0;
+
+    //Load a font, for text rendering.
+    let mut font = Glyphs::new(
+        assets.join("coders_crux.ttf"),
+        window.factory.clone(), //For some reason, this function needs to take ownership of factory to make the font, so here I clone one from the window
+        TextureSettings::new() //Just like the sprites from last tutorial, you can use a TextureSettings struct to set more advanced options
+    ).unwrap();
+
     while let Some(e) = window.next() {
-        
-        //e.press_args is used for handling keyboard presses
-        //Sets bools to true. Actual movement is handled in the update event
         if let Some(Button::Keyboard(key)) = e.press_args() {
             match key {
                 Key::W => {left_moving_up = true;}
@@ -73,8 +98,6 @@ fn main() {
             }
         }
 
-        //e.release_args is used for handling releasing keyboard keys
-        //Sets bools to false
         if let Some(Button::Keyboard(key)) = e.release_args() {
             match key {
                 Key::W => {left_moving_up = false;}
@@ -85,10 +108,7 @@ fn main() {
             }
         }
         
-        //e.update_args is a generic update
         if let Some(u) = e.update_args() {
-            //If the paddle tries to move up and down at the same time, it'll jitter in place
-            //This just sets them both to false if it tries to do that
             if left_moving_up && left_moving_down {
                 left_moving_up = false;
                 left_moving_down = false;
@@ -100,87 +120,153 @@ fn main() {
             }
 
             if left_moving_up {
-                //Y is 0 at the top of the screen and decreases as it goes further down the screen
-                //This checks if the paddle is beneath the top of the screen,
-                //so that the paddle can't be moved above the screen
-                if left_y > 0.0 {
-                    //u.dt is delta time - the amount of time that has passed since the last frame
-                    //This makes the movement variables resolution-independant. The game will run at the same speed if it's running at 30 or 60 fps
-                    let new_left_position = left_y - (player_speed * u.dt);
+                if left_paddle.y > 0.0 {
+                    let new_left_position = left_paddle.y - (PLAYER_SPEED * u.dt);
 
-                    //If the new position would be above the screen, put the paddle right at the top instead
                     if new_left_position <= 0.0 {
-                        left_y = 0.0;
+                        left_paddle.y = 0.0;
                     }
-
-                    //If it wouldn't be above the screen, move it to the proper space
                     else {
-                        left_y = new_left_position;
+                        left_paddle.y = new_left_position;
                     }
                 }
             }
 
             if left_moving_down {
-                //Same as above, but with the bottom of the screen instead of the top
-                //Coordinates for the sprite start at the top-left, so 240 is the height of the window minus the height of the sprite,
-                //which is when the sprite would visually look like it's touching the bottom.
-                if left_y < 240.0 {
-                    let new_left_position = left_y + (player_speed * u.dt);
+                if left_paddle.y < 240.0 {
+                    let new_left_position = left_paddle.y + (PLAYER_SPEED * u.dt);
 
                     if new_left_position >= 240.0 {
-                        left_y = 240.0;
+                        left_paddle.y = 240.0;
                     }
                     else {
-                        left_y = new_left_position;
+                        left_paddle.y = new_left_position;
                     }
                 }
             }
 
-            //This is exactly the same as the version handling the left.
             if right_moving_up {
-                if right_y > 0.0 {
-                    let new_right_position = right_y - (player_speed * u.dt);
+                if right_paddle.y > 0.0 {
+                    let new_right_position = right_paddle.y - (PLAYER_SPEED * u.dt);
 
                     if new_right_position <= 0.0 {
-                        right_y = 0.0;
+                        right_paddle.y = 0.0;
                     }
                     else {
-                        right_y = new_right_position;
+                        right_paddle.y = new_right_position;
                     }
                 }
             }
 
             if right_moving_down {
-                if right_y < 240.0 {
-                    let new_right_position = right_y + (player_speed * u.dt);
+                if right_paddle.y < 240.0 {
+                    let new_right_position = right_paddle.y + (PLAYER_SPEED * u.dt);
 
                     if new_right_position >= 240.0 {
-                        right_y = 240.0;
+                        right_paddle.y = 240.0;
                     }
                     else {
-                        right_y = new_right_position;
+                        right_paddle.y = new_right_position;
                     }
                 }
             }
+
+            //If the ball is off-screen to the right, plus 20 pixels as a buffer to make sure the ball has gone a little ways off-screen first,
+            //reset the ball and give player 1 a point
+            if ball.x > 660.0 {
+                ball.x = 316.0;
+                ball.y = 156.0;
+                ball_angle = rand::thread_rng().gen_range(0.0, 360.0);
+
+                player_one_score += 1;
+            }
+
+            //Same as above, but with the left side of the screen and player 2
+            if ball.x < -20.0 {
+                ball.x = 316.0;
+                ball.y = 156.0;
+                ball_angle = rand::thread_rng().gen_range(0.0, 360.0);
+
+                player_two_score += 1;
+            }
+
+            //If the ball tries to go off the top of the screen, make it bounce off
+            if ball.y <= 0.0 {
+                //Invert the angle to make the ball bounce the other way
+                ball_angle = -ball_angle;
+
+                //Set the ball to just barely under the screen, so it won't jitter there if delta time puts it a decent ways past the wall
+                ball.y = 0.01;
+            }
+
+            //Do the same for the bottom of the screen
+            if ball.y >= 312.0 {
+                ball_angle = -ball_angle;
+
+                ball.y = 311.99;
+            }
+
+            //Handle ball colliding with left paddle
+            if ball.intersects(&left_paddle) {
+                //Generate an angle that'll send it towards the right, plus a small buffer so it won't go vertically
+                ball_angle = rand::thread_rng().gen_range(110.0, 250.0);
+
+                //Set the ball to just right of the paddle so it won't immediately collide again.
+                ball.x = left_paddle.x + left_paddle.w + 0.01;
+            }
+
+            //Handle ball colliding with right paddle
+            if ball.intersects(&right_paddle) {
+                //Same as the left, but negative so it boinces left instead of right
+                ball_angle = 360.0 - rand::thread_rng().gen_range(110.0, 250.0);
+
+                ball.x = right_paddle.x - ball.w - 0.01;
+
+            } 
+
+            //Use cos and sin to convert a 360-degree angle to X and Y coordinates.
+            ball.x += ball_angle.cos() * BALL_SPEED * u.dt;
+            ball.y += ball_angle.sin() * BALL_SPEED * u.dt;
+
         }
 
         if let Some(_r) = e.render_args() {
                 window.draw_2d(&e, |c, g| {
                 clear([0.0; 4], g);
 
-                //Draws the image
-                //c.transform is the default place to draw a texture. By default, it points to (0, 0)
-                //Passing in c.transform by itself will put the texture's top-left corner at the top-left of the window
-                //the trans function will translate it by the coordinates given
-                //In this case, the image is translated by half the window width, minus half the texture width
-                //This puts the image in the center of the screen
                 image(&seperator, c.transform.trans(318.0, 0.0), g);
 
-                //Draw the left paddle
-                image(&paddle, c.transform.trans(50.0, left_y), g);
+                rectangle([1.0; 4],
+                      [left_paddle.x, left_paddle.y, left_paddle.w, left_paddle.h],
+                      c.transform,
+                      g);
 
-                //Draw the right paddle
-                image(&paddle, c.transform.trans(590.0, right_y), g);
+                rectangle([1.0; 4],
+                      [right_paddle.x, right_paddle.y, right_paddle.w, right_paddle.h],
+                      c.transform,
+                      g);
+
+                //Draw the ball
+                rectangle([1.0; 4],
+                    [ball.x, ball.y, ball.w, ball.h],
+                    c.transform,
+                    g);
+
+                text::Text::new_color([1.0; 4], 32).draw(
+                    &player_one_score.to_string(),
+                    &mut font,
+                    &c.draw_state,
+                    c.transform.trans(150.0, 50.0),
+                    g
+                ).unwrap();
+
+                text::Text::new_color([1.0; 4], 32).draw(
+                    &player_two_score.to_string(),
+                    &mut font,
+                    &c.draw_state,
+                    c.transform.trans(490.0, 50.0),
+                    g
+                ).unwrap();
             });
         }
     }

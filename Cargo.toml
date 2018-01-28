@@ -6,27 +6,36 @@ license = "MIT/Apache-2.0"
 
 [[bin]]
 name = "hello_window"
-path = "src/hello_window.rs"
+path = "src/1-getting_started/1-hello_window.rs"
+
+[[bin]]
+name = "event_loop"
+path = "src/1-getting_started/2-event_loop.rs"
+
+[[bin]]
+name = "keyboard"
+path = "src/1-getting_started/3-keyboard.rs"
+
+[[bin]]
+name = "sprite"
+path = "src/1-getting_started/4-sprite.rs"
+
+[[bin]]
+name = "aabb_collision"
+path = "src/1-getting_started/5-aabb_collision.rs"
+
+[[bin]]
+name = "sound_ears"
+path = "src/1-getting_started/6-sound_ears.rs"
+
+[[bin]]
+name = "sound_piston"
+path = "src/1-getting_started/6-sound_piston.rs"
 
 [[bin]]
 name = "pong"
 path = "src/pong/pong.rs"
 
-[[bin]]
-name = "pong_ball"
-path = "src/pong/pong_ball.rs"
-
-[[bin]]
-name = "aabb"
-path = "src/collision/aabb.rs"
-
-[[bin]]
-name = "sound-ears"
-path = "src/sound/sound-ears.rs"
-
-[[bin]]
-name = "sound-piston"
-path = "src/sound/sound-piston.rs"
 
 [dependencies]
 piston = "*"

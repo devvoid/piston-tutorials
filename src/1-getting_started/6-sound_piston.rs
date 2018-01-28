@@ -1,3 +1,6 @@
+///Feature name: sound_piston
+/// Example demonstrating piston_music.
+
 //piston_music is more complicated than Ears, at least in my opinion, but it's still a pretty good crate.
 //Note that at the time of writing, there isn't any documentation for piston_music on docs.piston.rs, and
 //it is listed as a place the Piston team is researching on the main repository.

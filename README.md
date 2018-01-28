@@ -1,20 +1,17 @@
 # piston-tutorials
 Series of tutorials on how to use the Piston game engine.
 
+Top line of every .rs file says the name of the feature. Compile examples using `cargo run --release --bin [FEATURE NAME]`.
+
 ## Requirements
 Must have a basic understanding of Rust, including concepts like functions, variables, references, and dependencies. I'll try to explain as much as I can, though.
 
-Graphics card must support OpenGL 2.1 or higher to run Piston.
+By default, examples need OpenGL 3.2 to run, but you can run them on 2.1 by changing one line of code in the window initialization.
 
-Two different sound libraries are included and used in the examples in the sound folder: Ears, and piston\_music. Ears requires OpenAL and libsnd, while piston\_music requires SDL2 and SDL2\_mixer. If you don't have these libraries installed and don't plan on using the sound examples, you can just remove them from Cargo.toml's dependencies section.
+Two different sound libraries are included and demonstrated in the getting_started folder: Ears, and piston\_music. Ears requires OpenAL and libsnd, while piston\_music requires SDL2 and SDL2\_mixer. If you don't have these libraries installed and don't plan on using the sound examples, you can just remove them from Cargo.toml's dependencies section.
 
-## Intended order
-1. hello_window (base window creation, basic explanation of event loop)
-2. aabb (AABB-based collision detection)
-3. pong (find_folder, more detailed event loop, keyboard input, sprite loading)
-4. pong_ball (random number generation, text rendering)
-5. sound-ears and sound-piston (sound loading and playing)
-    * Order doesn't matter; I was initially unaware of piston\_music's existence, but since Ears is much simpler to add (as well as having different library requirements), I decided to just make tutorials for both.
+## Notes
+Two sound examples are included, both numbered in getting\_started as example 6. When the tutorials were first written, I had no idea that piston\_music even existed, and so I wrote an example based on the Ears library instead. When I found out about piston\_music, I wrote an example about it too, but I kept the Ears example because it's much simpler to add and setup than piston\_music, and it has different library requirements. Future examples involving sound will likely use piston\_music exclusively, as this is a tutorial series about Piston.
 
 ## Credits
 The Coder's Crux font used in the pong_ball example was created by Andrew McClusky. You can find its download page [here](https://www.dafont.com/coders-crux.font).
