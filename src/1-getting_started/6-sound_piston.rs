@@ -7,6 +7,9 @@
 //This implies, at least to me, that it's still a work in progress, and it could change dramatically as time goes on.
 //So, these examples could break at any time, and I have to take even more guesses than usual to find out what various things mean.
 
+//Note: According to this Github issue (https://github.com/PistonDevelopers/music/issues/61), the program will crash if you try to
+//bind two files that are in different audio formats.
+
 extern crate music;
 extern crate piston_window;
 extern crate find_folder;
