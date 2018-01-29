@@ -79,9 +79,6 @@ fn main() {
     //Create music context and begin running code.
 
     //Music and Sound are the enums bound for music and sound respectively.
-    //The underscore can optionally be replaced with an FnOnce instead, and the function inside will be called as soon as initialization is complete
-    //For simplicity's take, I'll just use a closure in the function arguments instead, but later on I'll make another example showing how that works
-
     //The 16 is the number of sound channels to allocate - every sound being played takes up one channel,
     //so this setup means that 16 sounds can be playing at once.
 
