@@ -81,9 +81,6 @@ fn main() {
     //Music and Sound are the enums bound for music and sound respectively.
     //The 16 is the number of sound channels to allocate - every sound being played takes up one channel,
     //so this setup means that 16 sounds can be playing at once.
-
-    //Note that the examples in the piston_music repository just have all the window-updating code inside of the closure.
-    //I have absolutely no idea if this is best practice, or if using the FnOnce would be better. For simplicity, I'll just use the closure instead.
     music::start::<Music, Sound, _>(16, || {
         //Bind music and sound files to the enums defined earlier.
         music::bind_music_file(Music::Piano, assets.join("sound/the_entertainer.wav"));
