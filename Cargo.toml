@@ -5,6 +5,10 @@ authors = ["void"]
 license = "MIT/Apache-2.0"
 
 [[bin]]
+name = "base"
+path = "src/base.rs"
+
+[[bin]]
 name = "hello_window"
 path = "src/1-getting_started/1-hello_window.rs"
 
